@@ -1009,23 +1009,31 @@ ORDER BY   civicrm_email.is_bulkmail DESC
    *
    * @return void
    */
-  public static function addMessageIdHeader(&$headers, $prefix, $job_id, $event_queue_id, $hash) {
+public static function addMessageIdHeader(&$headers, $prefix, $job_id, $event_queue_id, $hash) {
     $config = CRM_Core_Config::singleton();
     $localpart = CRM_Core_BAO_MailSettings::defaultLocalpart();
     $emailDomain = CRM_Core_BAO_MailSettings::defaultDomain();
     $includeMessageId = CRM_Core_BAO_MailSettings::includeMessageId();
-
-    if ($includeMessageId && (!array_key_exists('Message-ID', $headers))) {
-      $headers['Message-ID'] = '<' . implode($config->verpSeparator,
-          array(
-            $localpart . $prefix,
-            $job_id,
-            $event_queue_id,
-            $hash,
-          )
-        ) . "@{$emailDomain}>";
+    $fields = array();
+    $fields[] = 'Message-ID';
+    // CRM-17754 check if Resent-Message-id is set also if not add it in when re-laying reply email
+    if ($prefix == 'r') {
+      $fields[] = 'Resent-Message-ID';
+    }
+    foreach ($fields as $field) {
+      if ($includeMessageId && (!array_key_exists($field, $headers))) {
+        $headers[$field] = '<' . implode($config->verpSeparator,
+            array(
+              $localpart . $prefix,
+              $job_id,
+              $event_queue_id,
+              $hash,
+            )
+          ) . "@{$emailDomain}>";
+      }
     }
   }
+
 
   /**
    * Static wrapper for getting verp and urls.
