@@ -16,7 +16,7 @@ Domain Path: /languages
  +--------------------------------------------------------------------+
  | CiviCRM version 4.7                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2017                                |
+ | Copyright CiviCRM LLC (c) 2004-2016                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -41,7 +41,7 @@ Domain Path: /languages
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2017
+ * @copyright CiviCRM LLC (c) 2004-2016
  *
  */
 
@@ -1413,6 +1413,12 @@ class CiviCRM_For_WordPress {
    * Clone of CRM_Utils_System_WordPress::getBaseUrl() whose access is set to
    * private. Until it is public, we cannot access the URL of the basepage since
    * CRM_Utils_System_WordPress::url()
+   * 
+   * 27-09-2016
+   * CRM-16421 CRM-17633 WIP Changes to support WP in it's own directory
+   * https://wiki.civicrm.org/confluence/display/CRM/WordPress+installed+in+its+own+directory+issues
+   * For now leave hard coded wp-admin references.
+   * TODO: remove wp-admin references and replace with admin_url() in the future.  Look at best way to get path to admin_url
    *
    * @param bool $absolute Passing TRUE prepends the scheme and domain, FALSE doesn't
    * @param bool $frontend Passing FALSE returns the admin URL
@@ -1421,25 +1427,12 @@ class CiviCRM_For_WordPress {
    */
   public function get_base_url($absolute, $frontend, $forceBackend) {
     $config = CRM_Core_Config::singleton();
-    if (!defined('CIVICRM_UF_ADMINURL')) {
-      define('CIVICRM_UF_ADMINURL', CIVICRM_UF_BASEURL . 'wp-admin/');
-    }
-    if (!defined('CIVICRM_UF_WP_BASEURL')) {
-      define('CIVICRM_UF_WP_BASEURL', CIVICRM_UF_BASEURL );
-    }
     if ((is_admin() && !$frontend) || $forceBackend) {
-      $url = CIVICRM_UF_ADMINURL . 'admin.php';
-      return $url;
+      return Civi::paths()->getUrl('[wp.backend]/.', $absolute ? 'absolute' : 'relative');
     }
-    elseif (defined('CIVICRM_UF_WP_BASEPAGE')) {
-      $url = CIVICRM_UF_WP_BASEURL  . CIVICRM_UF_WP_BASEPAGE  ;
-      return $url;
+    else {
+      return Civi::paths()->getUrl('[wp.frontend]/.', $absolute ? 'absolute' : 'relative');
     }
-    elseif (isset($config->wpBasePage)) {
-      $url = CIVICRM_UF_WP_BASEURL  . $config->wpBasePage;
-      return $url;
-    }
-    return $absolute ? $url :  preg_replace(';https?://[^/]+/;', '/', $url);
   }
 
 
