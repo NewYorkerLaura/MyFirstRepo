@@ -188,7 +188,7 @@ if ( ! defined( 'CIVICRM_WPCLI_LOADED' ) ) {
 				case 'args':
 					$params = $defaults;
 					foreach ( $this->args as $arg ) {
-						preg_match( '/^( [^=]+ )=( .* )$/', $arg, $matches );
+						preg_match( '/^([^=]+)=(.*)$/', $arg, $matches );
 						$params[ $matches[1] ] = $matches[2];
 					}
 					break;
@@ -1135,7 +1135,7 @@ if ( ! defined( 'CIVICRM_WPCLI_LOADED' ) ) {
 
 			// Get phptype and dbsyntax
 			// $str => phptype( dbsyntax )
-			if ( preg_match( '|^( .+? )\( ( .*? )\ )$|', $str, $arr ) ) {
+			if ( preg_match( '|^(.+? )\((.*?)\ )$|', $str, $arr ) ) {
 				$parsed['phptype']  = $arr[1];
 				$parsed['dbsyntax'] = ! $arr[2] ? $arr[1] : $arr[2];
 			} else {
@@ -1162,7 +1162,7 @@ if ( ! defined( 'CIVICRM_WPCLI_LOADED' ) ) {
 
 			// Find protocol and hostspec
 
-			if ( preg_match( '|^( [^( ]+ )\( ( .*? )\ )/?( .*? )$|', $dsn, $match ) ) {
+			if ( preg_match( '|^([^(]+)\((.*? )\)/?(.*?)$|', $dsn, $match ) ) {
 				// $dsn => proto( proto_opts )/database
 				$proto       = $match[1];
 				$proto_opts  = $match[2] ? $match[2] : false;
