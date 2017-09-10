@@ -182,13 +182,14 @@ if ( ! defined( 'CIVICRM_WPCLI_LOADED' ) ) {
 
 			# parse $params
 
-			switch ( $this->getOption( 'in', 'args' ) ) {
+            $format = $this->getOption( 'in', 'args' );
+            switch ( $format ) {
 
 				# input params supplied via args ..
 				case 'args':
 					$params = $defaults;
 					foreach ( $this->args as $arg ) {
-						preg_match( '/^([^=]+)=(.*)$/', $arg, $matches );
+                      preg_match( '/^([^=]+)=(.*)$/', $arg, $matches );
 						$params[ $matches[1] ] = $matches[2];
 					}
 					break;
