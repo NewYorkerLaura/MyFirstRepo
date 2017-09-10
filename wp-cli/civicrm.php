@@ -1136,7 +1136,7 @@ if ( ! defined( 'CIVICRM_WPCLI_LOADED' ) ) {
 
 			// Get phptype and dbsyntax
 			// $str => phptype( dbsyntax )
-			if ( preg_match( '|^(.+? )\((.*?)\ )$|', $str, $arr ) ) {
+			if ( preg_match( '|^(.+?)\((.*?)\)$|', $str, $arr ) ) {
 				$parsed['phptype']  = $arr[1];
 				$parsed['dbsyntax'] = ! $arr[2] ? $arr[1] : $arr[2];
 			} else {
