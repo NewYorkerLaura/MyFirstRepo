@@ -591,7 +591,7 @@ class CRM_Utils_System_WordPress extends CRM_Utils_System_Base {
       }
       elseif (email_exists($params['mail'])) {
         $errors[$emailName] = ts('The email address %1 already has an account associated with it. <a href="%2">Have you forgotten your password?</a>',
-          array(1 => $params['mail'], 2 => wp_lostpassword_url())
+          array(1 => $params['mail'], 2 => 'lost-password')
         );
       }
     }
@@ -661,7 +661,7 @@ class CRM_Utils_System_WordPress extends CRM_Utils_System_Base {
    */
   public function getLoginURL($destination = '') {
     $config = CRM_Core_Config::singleton();
-    $loginURL = wp_login_url();
+    $loginURL = 'login';
     return $loginURL;
   }
 
