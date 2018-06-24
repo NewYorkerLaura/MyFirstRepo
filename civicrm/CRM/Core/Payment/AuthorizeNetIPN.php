@@ -372,12 +372,14 @@ INNER JOIN civicrm_membership_payment mp ON m.id = mp.membership_id AND mp.contr
       // For decline we have nothing to check against.
       return;
     }
+    /* Temporarily disable MD5 Hash check
     if (!$paymentObject->checkMD5($input['MD5_Hash'], $input['trxn_id'], $input['amount'], TRUE)) {
       $message = "Failure: Security verification failed";
       $log = new CRM_Utils_SystemLogger();
       $log->error('payment_notification', array('message' => $message, 'input' => $input));
       throw new CRM_Core_Exception($message);
     }
+    */
   }
 
 }
